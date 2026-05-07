@@ -1,0 +1,21 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.idea/
+.vscode/
+
+# Backup / scratch files
+solution - Copy.py
+
+# Generated pipeline outputs — keep directory structure via .gitkeep
+data/staging/*.csv
+data/marts/*.csv
+data/analytics/*.csv
+data/data_quality/*.csv
