@@ -1,41 +1,52 @@
-﻿from pipeline.staging import load_raw_data, build_staging
+﻿import logging
+
+from pipeline.logger import setup_logging
+from pipeline.staging import load_raw_data, build_staging
 from pipeline.marts import build_marts
 from pipeline.data_quality import run_data_quality_checks
 from pipeline.analytics import build_analytics, build_kpis
 
+logger = logging.getLogger(__name__)
 
 def main() -> None:
-    print("=== Retail Loyalty Pipeline ===")
+    setup_logging()
 
-    print("[1/5] Loading raw data...")
+    logger.info("=== Retail Loyalty Pipeline ===")
+
+    logger.info("[1/5] Loading raw data...")
     raw = load_raw_data()
-
-    print("[2/5] Building staging tables...")
+      
+    logger.info("[2/5] Building staging tables...")
     stg = build_staging(raw)
     for name, df in stg.items():
-        print(f"      {name}: {len(df)} rows")
+        logger.info("      %s: %s rows", name, len(df))
 
-    print("[3/5] Building mart tables...")
+    logger.info("[3/5] Building mart tables...")
     marts = build_marts(stg)
     for name, df in marts.items():
-        print(f"      {name}: {len(df)} rows")
+        logger.info("      %s: %s rows", name, len(df))
 
-    print("[4/5] Running data quality checks...")
+    logger.info("[4/5] Running data quality checks...")
     dq_report = run_data_quality_checks(stg, marts)
     errors = dq_report[dq_report["severity"] == "error"]
     warnings = dq_report[dq_report["severity"] == "warning"]
-    print(f"      {len(dq_report)} checks -- {len(errors)} errors, {len(warnings)} warnings")
+    logger.info(
+        "      %s checks -- %s errors, %s warnings",
+        len(dq_report),
+        len(errors),
+        len(warnings),
+    )
     failed = dq_report[dq_report["failed_count"] > 0]
     if not failed.empty:
-        print(failed[["check_name", "severity", "failed_count"]].to_string(index=False))
+        logger.info(failed[["check_name", "severity", "failed_count"]].to_string(index=False))
 
-    print("[5/5] Building analytics and KPIs...")
+    logger.info("[5/5] Building analytics and KPIs...")
     analytics = build_analytics(marts)
     kpis = build_kpis(marts, analytics)
-    print("\n--- KPI Summary ---")
-    print(kpis.to_string(index=False))
+    logger.info("\n--- KPI Summary ---")
+    logger.info(kpis.to_string(index=False))
 
-    print("\n=== Pipeline complete. All outputs written to data/ ===")
+    logger.info("\n=== Pipeline complete. All outputs written to data/ ===")
 
 
 if __name__ == "__main__":
