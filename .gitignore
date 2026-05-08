@@ -26,3 +26,8 @@ env/
 
 # Environment files
 .env
+
+# Build / packaging
+*.egg-info/
+dist/
+build/

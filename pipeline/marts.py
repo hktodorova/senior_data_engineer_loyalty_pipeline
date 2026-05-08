@@ -5,8 +5,6 @@ import pandas as pd
 
 from pipeline.config import MARTS_DIR
 
-MARTS_DIR = Path("data/marts")
-
 def build_marts(stg: dict[str, pd.DataFrame], marts_dir: Path = MARTS_DIR) -> dict[str, pd.DataFrame]:
     """Build business-ready mart tables."""
     marts_dir.mkdir(parents=True, exist_ok=True)

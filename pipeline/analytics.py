@@ -4,8 +4,6 @@ import pandas as pd
 
 from pipeline.config import ANALYTICS_DIR
 
-ANALYTICS_DIR = Path("data/analytics")
-
 
 def build_analytics(
     marts: dict[str, pd.DataFrame],

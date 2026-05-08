@@ -4,8 +4,6 @@ import pandas as pd
 
 from pipeline.config import DQ_DIR, RAW_DIR
 
-DQ_DIR = Path("data/data_quality")
-
 
 def run_data_quality_checks(
     stg: dict[str, pd.DataFrame],
