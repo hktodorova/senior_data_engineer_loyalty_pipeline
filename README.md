@@ -7,10 +7,11 @@ A production-grade data pipeline that transforms messy raw retail data into clea
 ## Quick start
 
 ```bash
-python solution.py
+pip install -e .
+retail-pipeline
 ```
 
-Requires Python 3.11+ and pandas/numpy installed in the environment.
+Requires Python 3.11+.
 
 All outputs are written to `data/` and are fully idempotent – re-running overwrites everything cleanly.
 
@@ -19,19 +20,37 @@ All outputs are written to `data/` and are fully idempotent – re-running overw
 ## Project structure
 
 ```text
+pipeline/
+  __init__.py
+  main.py
+  staging.py
+  marts.py
+  analytics.py
+  data_quality.py
+  config.py
+  logger.py
+
+tests/
+  test_marts.py
+  test_revenue_logic.py
+  test_order_status.py
+  test_loyalty.py
+  test_data_quality.py
+
 data/
-  raw/                     # Source CSV files (do not modify)
-  staging/                 # Cleaned and normalised tables (stg_*)
-  marts/                   # Fact and dimension tables
-  analytics/               # Revenue breakdowns and loyalty summary
-  data_quality/            # Data quality report
+  raw/
+  staging/
+  marts/
+  analytics/
+  data_quality/
 
 docs/
-  DATA_DICTIONARY.md       # Field-level documentation
+  DATA_DICTIONARY.md
 
-solution.py                # Complete pipeline implementation
-PROJECT_BRIEF.md           # Full requirements and modeling rules
-README.md                  # Project documentation
+README.md
+requirements.txt
+pyproject.toml
+PROJECT_BRIEF.md
 ```
 
 ---
@@ -317,6 +336,27 @@ The project cleanly separates:
 - data quality checks
 - idempotent pipelines
 - pandas-based transformation pipelines
+- modular pipeline architecture
+- structured logging
+- Python packaging and CLI execution
+
+---
+
+## Tests
+
+Run the test suite:
+
+```bash
+pytest
+```
+
+Implemented tests cover:
+
+- mart calculations
+- KPI logic
+- loyalty points logic
+- revenue calculations
+- data quality validation
 
 ---
 
@@ -325,12 +365,12 @@ The project cleanly separates:
 Potential extensions:
 
 1. Incremental processing
-2. Unit tests
-3. Structured logging
-4. Runtime metrics
-5. Schema validation with Pandera
-6. SQL/dbt implementation
-7. Spark implementation
-8. SCD Type 2 customer tracking
-9. Dockerization
-10. CI/CD pipeline
+2. Pandera schema validation
+3. Runtime metrics and monitoring
+4. SQL/dbt implementation
+5. Spark implementation
+6. SCD Type 2 customer tracking
+7. Dockerization
+8. CI/CD pipeline
+9. Airflow orchestration
+10. Cloud deployment

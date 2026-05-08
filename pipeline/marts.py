@@ -5,6 +5,26 @@ import pandas as pd
 
 from pipeline.config import MARTS_DIR
 
+
+def _points_for_amount(amount: float, thresholds: "pd.DataFrame | None" = None) -> float:
+    """Return points awarded for a given order amount based on threshold table."""
+    if thresholds is None:
+        from pipeline.config import RAW_DIR
+        thresholds = pd.read_csv(RAW_DIR / "points_thresholds.csv")
+    if pd.isna(amount):
+        return 0
+    match = thresholds[
+        (thresholds["min_amount"] <= amount)
+        & (
+            thresholds["max_amount"].isna()
+            | (amount <= thresholds["max_amount"])
+        )
+    ]
+    if match.empty:
+        return 0
+    return float(match.sort_values("min_amount").iloc[-1]["points_awarded"])
+
+
 def build_marts(stg: dict[str, pd.DataFrame], marts_dir: Path = MARTS_DIR) -> dict[str, pd.DataFrame]:
     """Build business-ready mart tables."""
     marts_dir.mkdir(parents=True, exist_ok=True)
@@ -163,22 +183,10 @@ def build_marts(stg: dict[str, pd.DataFrame], marts_dir: Path = MARTS_DIR) -> di
         ["order_id", "customer_id", "order_date", "order_expected_amount"],
     ].merge(active_cards, on="customer_id", how="inner")
 
-    def _points_for_amount(amount: float) -> float:
-        if pd.isna(amount):
-            return 0
-        match = stg_points_thresholds[
-            (stg_points_thresholds["min_amount"] <= amount)
-            & (
-                stg_points_thresholds["max_amount"].isna()
-                | (amount <= stg_points_thresholds["max_amount"])
-            )
-        ]
-        if match.empty:
-            return 0
-        return float(match.sort_values("min_amount").iloc[-1]["points_awarded"])
-
     computed_earn = eligible_orders.copy()
-    computed_earn["points_delta"] = computed_earn["order_expected_amount"].apply(_points_for_amount)
+    computed_earn["points_delta"] = computed_earn["order_expected_amount"].apply(
+        lambda amt: _points_for_amount(amt, stg_points_thresholds)
+    )
     computed_earn = computed_earn[computed_earn["points_delta"] > 0].copy()
     computed_earn["event_datetime"] = computed_earn["order_date"]
     computed_earn["event_type"] = "earn"
