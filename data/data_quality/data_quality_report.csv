@@ -1,0 +1,18 @@
+check_name,severity,failed_count,description
+duplicate_orders,warning,24,Rows in orders_master with a duplicated order_id (before dedup).
+duplicate_payment_ids,warning,20,Rows in payments with a duplicated payment_id (before dedup).
+orders_without_customer,warning,6,Orders whose customer_id does not exist in the customers table.
+order_details_without_order,error,0,Order detail lines whose order_id does not exist in orders_master.
+order_lines_with_invalid_product,warning,8,Order lines referencing a product_id not found in the products table.
+payments_without_order,error,1,Payments whose order_id does not exist in orders_master.
+payments_with_invalid_card,warning,0,Payments referencing a card_id not present in customer_cards.
+payments_with_card_not_owned_by_customer,error,0,Payments where the card registered owner differs from the order customer.
+payments_using_inactive_or_blocked_card,warning,13,Payments made with a card whose status is inactive or blocked.
+orders_without_payment,info,94,Orders that have no associated payment record.
+cancelled_orders_with_successful_payment,warning,20,Orders marked cancelled that still have at least one successful payment.
+paid_orders_without_successful_payment,error,36,Orders marked paid but lacking any successful payment event.
+orders_with_negative_expected_amount,error,0,Orders whose sum of line_net amounts is negative.
+orders_overpaid,info,334,Orders where net_collected_amount exceeds the order_expected_amount.
+points_used_without_card,warning,0,Point-redemption payments where no card_id is recorded.
+points_ledger_invalid_card,error,1,Points ledger entries referencing a card_id not present in customer_cards.
+negative_points_balance,error,8,Cards whose cumulative points balance is negative.

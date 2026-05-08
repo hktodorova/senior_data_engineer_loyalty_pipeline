@@ -1,9 +1,7 @@
 from pathlib import Path
+from pipeline.config import RAW_DIR, STAGING_DIR
 
 import pandas as pd
-
-RAW_DIR = Path("data/raw")
-STAGING_DIR = Path("data/staging")
 
 
 def load_raw_data(raw_dir: Path = RAW_DIR) -> dict[str, pd.DataFrame]:

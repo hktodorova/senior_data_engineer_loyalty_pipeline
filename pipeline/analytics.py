@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from pipeline.config import ANALYTICS_DIR
+
 ANALYTICS_DIR = Path("data/analytics")
 
 

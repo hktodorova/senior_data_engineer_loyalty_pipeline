@@ -2,7 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 
-RAW_DIR = Path("data/raw")
+from pipeline.config import DQ_DIR, RAW_DIR
+
 DQ_DIR = Path("data/data_quality")
 
 

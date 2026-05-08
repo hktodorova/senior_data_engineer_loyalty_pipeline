@@ -3,9 +3,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-MARTS_DIR = Path("data/marts")
-RAW_DIR = Path("data/raw")
+from pipeline.config import MARTS_DIR
 
+MARTS_DIR = Path("data/marts")
 
 def build_marts(stg: dict[str, pd.DataFrame], marts_dir: Path = MARTS_DIR) -> dict[str, pd.DataFrame]:
     """Build business-ready mart tables."""
