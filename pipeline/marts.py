@@ -115,7 +115,10 @@ def build_marts(stg: dict[str, pd.DataFrame], marts_dir: Path = MARTS_DIR) -> di
     ]:
         fact_orders[col] = fact_orders[col].fillna(0)
     for col in ["has_successful_payment", "has_pending_payment"]:
-        fact_orders[col] = fact_orders[col].fillna(False).astype(bool)
+        fact_orders[col] = fact_orders[col].where(
+            fact_orders[col].notna(),
+            False,
+        ).astype(bool)
 
     fact_orders["net_collected_amount"] = (
         fact_orders["total_cash_collected_amount"] - fact_orders["total_refund_amount"]

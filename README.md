@@ -254,7 +254,7 @@ Implemented checks include:
 | partial_payment_orders        | 513           |
 | overpaid_orders               | 334           |
 | cancelled_orders_with_payment | 20            |
-| active_cards                  | 137           |
+| active_cards                  | 140           |
 | points_earned                 | 47,649        |
 | points_redeemed               | 1,795         |
 | points_liability              | 46,084        |
